@@ -63,3 +63,16 @@ FROM dogs LIMIT 5, 10;
 %%sql
 SELECT dog_guid, subcategory_name, test_name
 FROM reviews LIMIT 15
+
+%%sql
+SELECT activity_type, created_at, updated_at
+FROM site_activities LIMIT 10 OFFSET 50
+
+#How would you retrieve 20 rows of data from all
+#the columns in the users table, starting from row 2000?
+%%sql
+SELECT *
+FROM users
+LIMIT 20 OFFSET 2000
+
+
