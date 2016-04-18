@@ -62,3 +62,9 @@ located in the state of North Carolina (abbreviated "NC")
 or New York (abbreviated "NY")? If you do not limit
 the output of this query, your output should contain 1333 rows.
 */
+
+%%sql
+SELECT *
+FROM users
+WHERE state IN ("NC", "NY")
+LIMIT 10
