@@ -150,7 +150,21 @@ Question 7: How would you select all of the User IDs of customers who have
 
 %%sql
 SHOW columns FROM users
-SELECT user_guid
-FROM customers
-WHERE 
-LIMIT 10;
+
+SHOW columns FROM dogs
+
+#variables include: gender ("female" or "male"), breed, user_guid
+
+SELECT user_guid, gender, breed
+FROM dogs
+WHERE gender ="female" AND breed  LIKE ("%terrier%");
+
+/*Question 8: How would you select the Dog ID, test name, 
+and subcategory associated with each completed test for
+ the first 100 tests entered in October, 2014?*/
+ 
+%%sql
+SELECT dog_guid, test_name, subcategory_name
+FROM complete_tests
+WHERE created_at  BETWEEN '2014-10-01' AND  '2014-10-31'
+LIMIT 100;
