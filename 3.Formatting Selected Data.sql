@@ -123,3 +123,34 @@ we have set up Jupyter to only display 1000 rows of the output.*/
 variable_name_of_your_choice = %sql [your full query goes here];
 
 breed_list = %sql SELECT DISTINCT breed FROM dogs ORDER BY breed;
+
+
+/*Question 4: How would you get a list of all the subcategories of Dognition tests,
+ in alphabetical order, with no test listed more than once (if you do not limit your
+output, you should retrieve 16 rows)?*/
+%%sql
+
+
+/*Question 5: How would you create a text file with a list of all the non-United States 
+countries of Dognition customers with no country listed more than once?*/
+%%sql
+
+/*Question 6: How would you find the User ID, Dog ID, and test name of the first 
+10 tests to ever be completed in the Dognition database?*/
+%%sql
+
+/*
+Question 7: How would create a text file with a list of all the customers with yearly
+ memberships who live in the state of North Carolina (USA) and joined Dognition
+after March 1, 2014, sorted so that the most recent member is at the top of the list?*/
+%%sql
+
+/*Question 8: See if you can find an SQL function from the list provided at:
+http://www.w3resource.com/mysql/mysql-functions-and-operators.php
+that would allow you to output all of the distinct breed names in UPPER case.
+Create a query that would output a list of these names in upper case, sorted 
+in alphabetical order.*/
+%%sql
+
+
+https://duke.box.com/shared/static/l9v2khefe7er98pj1k6oyhmku4tz5wpf.jpg
