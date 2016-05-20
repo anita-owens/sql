@@ -129,11 +129,15 @@ breed_list = %sql SELECT DISTINCT breed FROM dogs ORDER BY breed;
  in alphabetical order, with no test listed more than once (if you do not limit your
 output, you should retrieve 16 rows)?*/
 %%sql
-
+SELECT DISTINCT subcategory_names
+FROM complete_tests
+ORDER BY subcategory_names ASC
 
 /*Question 5: How would you create a text file with a list of all the non-United States 
 countries of Dognition customers with no country listed more than once?*/
 %%sql
+
+nonUS=%sql SELECT DISTINCT country FROM customers ORDER BY country;
 
 /*Question 6: How would you find the User ID, Dog ID, and test name of the first 
 10 tests to ever be completed in the Dognition database?*/
