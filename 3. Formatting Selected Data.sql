@@ -33,22 +33,45 @@ SELECT statement, the combination of all the columns together
 For example, if you wanted to know all the possible combinations 
 of states and cities in the users table, you could query:*/
 
+%%sql
 SELECT DISTINCT state, city
 FROM users;
+
+%%sql
+SELECT COUNT(*)
+FROM
+(SELECT DISTINCT state, city
+FROM users)
+myNewTable;
+
+
+
+/*If you wanted the breeds of dogs in the dog table sorted in
+alphabetical order, you could query:*/
+
+%%sql
+SELECT DISTINCT breed
+FROM dogs 
+ORDER BY breed
 
 /*Question 2: How would you list all the possible combinations 
 of test names and subcategory names in complete_tests table?
  (If you do not limit your output, you should retrieve 45 possible
   combinations)*/
-  SELECT DISTINCT test_names, subcategory_names
-  FROM complete_tests;
   
+%%sql
+SHOW columns FROM complete_tests;
   
-  SELECT COUNT(*)
-  FROM
-  (SELECT DISTINCT test_names, subcategory_names
-  FROM complete_tests)
-  myNewTable;
+%%sql
+SELECT DISTINCT test_name, subcategory_name
+FROM complete_tests;
+  
+%%sql
+SELECT COUNT(*)
+FROM
+(SELECT DISTINCT test_name, subcategory_name
+FROM complete_tests)
+myNewTable;
   
   
   /*Use ORDER BY to sort the output of your query. Your 
@@ -102,6 +125,10 @@ ORDER BY state ASC, membership_type ASC
 /*Question 3: Below, try executing a query that would sort
  the same output as described above by membership_type first
 in descending order, and state second in ascending order:*/
+
+%%sql
+SHOW columns FROM users
+
 %%sql
 SELECT DISTINCT user_guid, state, membership_type
 FROM users
@@ -125,36 +152,97 @@ variable_name_of_your_choice = %sql [your full query goes here];
 breed_list = %sql SELECT DISTINCT breed FROM dogs ORDER BY breed;
 
 
+/*Once your variable is created, using the above command tell Jupyter to format the variable as a csv file using the following syntax:
+the_output_name_you_want.csv('the_output_name_you_want.csv')*/
+
+breed_list.csv('breed_list.csv')
+
+/*You should see a link in the output line that says "CSV results." You can click on this link to see the text file in a tab in your browser or to download the file to your computer (exactly how this works will differ depending on your browser and settings, but your options will be the same as if you were trying to open or download a file from any other website.)
+You can also open the file directly from the home page of your Jupyter account. Behind the scenes, your csv file was written to your directory on the Jupyter server, so you should now see this file listed in your Jupyter account landing page along with the list of your notebooks. Just like a notebook, you can copy it, rename it, or delete it from your directory by clicking on the check box next to the file and clicking the "duplicate," "rename," or trash can buttons at the top of the page.*/
+
+
+/*The following description of a function called REPLACE is included in that resource:
+"REPLACE(str,from_str,to_str)
+Returns the string str with all occurrences of the string from_str replaced by the string to_str. REPLACE() performs a case-sensitive match when searching for from_str."
+One thing we could try is using this function to replace any dashes included in the breed names with no character:*/
+
+SELECT DISTINCT breed,
+REPLACE(breed,'-','') AS breed_fixed
+FROM dogs
+ORDER BY breed_fixed
+
+
+/*
+That was helpful, but you'll still notice some issues with the output.
+First, the leading dashes are indeed removed in the breed_fixed column, but now the dashes used to separate breeds in entries like 'French Bulldog-Boston Terrier Mix' are missing as well. So REPLACE isn't the right choice to selectively remove leading dashes.
+Perhaps we could try using the TRIM function:*/
+
+%%sql
+SELECT DISTINCT breed, TRIM(LEADING '-' FROM breed) AS breed_fixed
+FROM dogs
+ORDER BY breed_fixed
+
+/*
+Now it's time to practice using AS, DISTINCT, and ORDER BY in your own queries.*/
+
+
 /*Question 4: How would you get a list of all the subcategories of Dognition tests,
  in alphabetical order, with no test listed more than once (if you do not limit your
 output, you should retrieve 16 rows)?*/
 %%sql
-SELECT DISTINCT subcategory_names
+SELECT DISTINCT subcategory_name
 FROM complete_tests
-ORDER BY subcategory_names ASC
+ORDER BY subcategory_name ASC
 
 /*Question 5: How would you create a text file with a list of all the non-United States 
 countries of Dognition customers with no country listed more than once?*/
 %%sql
 
-nonUS=%sql SELECT DISTINCT country FROM customers ORDER BY country;
+nonUS=%sql SELECT DISTINCT country FROM users ORDER BY country;
+
+nonUS.csv('nonUS.csv')
 
 /*Question 6: How would you find the User ID, Dog ID, and test name of the first 
 10 tests to ever be completed in the Dognition database?*/
+
+%sql DESCRIBE complete_tests
+
 %%sql
+SELECT user_guid, dog_guid, test_name
+FROM complete_tests
+LIMIT 10;
+
 
 /*
 Question 7: How would create a text file with a list of all the customers with yearly
  memberships who live in the state of North Carolina (USA) and joined Dognition
 after March 1, 2014, sorted so that the most recent member is at the top of the list?*/
+
+%sql DESCRIBE users
+
 %%sql
+SHOW COLUMNS FROM users
+
+%%sql
+SELECT * 
+FROM users
+LIMIT 10;
+
+
+NC_user=%sql SELECT user_guid, created_at, state, subscribed FROM users WHERE state="NC"  AND membership_type=2 AND created_at > '2014-03-01' ORDER BY created_at ASC
+NC_user.csv('NC_user.csv')
 
 /*Question 8: See if you can find an SQL function from the list provided at:
 http://www.w3resource.com/mysql/mysql-functions-and-operators.php
 that would allow you to output all of the distinct breed names in UPPER case.
 Create a query that would output a list of these names in upper case, sorted 
 in alphabetical order.*/
-%%sql
 
+%%sql
+SHOW COLUMNS FROM dogs
+
+%%sql
+SELECT UCASE (breed_type)
+FROM dogs;
 
 https://duke.box.com/shared/static/l9v2khefe7er98pj1k6oyhmku4tz5wpf.jpg

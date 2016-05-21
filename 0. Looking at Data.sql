@@ -1,8 +1,27 @@
 #MySQL Exercise 1: Welcome to your first notebook!¶
 
+
+/*The first thing you should do every time you start working with a database: load the SQL library*/
+
 #load sql library
 %load_ext sql
 
+
+/*The second thing you must do every time you want to start working with a database: connect to the database you need to use.*/
+
+%sql mysql://studentuser:studentpw@mysqlserver/dognitiondb
+
+/*The third thing you should do every time you start working with a new database: get to know your data*/
+
+%sql SHOW tables
+
+SHOW columns FROM (enter table name here)
+
+/*or if you have multiple databases loaded:*/
+SHOW columns FROM (enter table name here) FROM (enter database name here)
+
+/*An alternate way to learn the same information would be to use the DESCRIBE function. The syntax is:
+*/
 
 %sql DESCRIBE complete_tests
 

@@ -1,0 +1,1 @@
+/*Teradata Database Exercises*/
