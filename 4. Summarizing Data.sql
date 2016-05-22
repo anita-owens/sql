@@ -47,7 +47,7 @@ WHERE created_at > '2014-03-01'
 
 %%sql
 SELECT COUNT(*)
-FROM dogs
+FROM dogs;
 
 /*Question 3: Now count the number of rows in the exclude column of the dogs table:*/
 
@@ -67,7 +67,7 @@ table (value will be "1")? (the answer should be 853)*/
 %%sql
 SELECT COUNT(DISTINCT dog_guid)
 FROM dogs
-WHERE exclude=1
+WHERE exclude=1;
 
 /*Conveniently, we can combine the SUM function with ISNULL to count exactly how many NULL values there are. Look up "ISNULL" at this link to MySQL functions I included in an earlier lesson:
 http://www.w3resource.com/mysql/mysql-functions-and-operators.php
@@ -82,7 +82,9 @@ SELECT SUM(ISNULL(exclude))
 FROM dogs
 
 /*
-The output should return a value of 34,025. When you add that number to the 1025 entries that have an exclude flag, you get a total of 35,050, which is the number of rows reported by SELECT COUNT(*) from dogs.
+The output should return a value of 34,025. When you add that number
+ to the 1025 entries that have an exclude flag, you get a total of 35,050,
+which is the number of rows reported by SELECT COUNT(*) from dogs.
 3. The AVG, MIN, and MAX Functions
 AVG, MIN, and MAX all work very similarly to SUM.
 During the Dognition test, customers were asked the question: "How surprising were [your dog’s name]’s choices?” after completing a test. Users could choose any number between 1 (not surprising) to 9 (very surprising). We could retrieve the average, minimum, and maximum rating customers gave to this question after completing the "Eye Contact Game" with the following query:
@@ -94,3 +96,119 @@ MIN(rating) AS MIN_Rating,
 MAX(rating) AS MAX_Rating
 FROM reviews
 WHERE test_name="Eye Contact Game";
+
+
+/*Question 5: What is the average, minimum, and maximum ratings given
+ to "Memory versus Pointing" game? (Your answer should be 3.5584, 0, 
+and 9, respectively)*/
+
+%%sql
+SELECT test_name, 
+AVG(rating) AS AVG_Rating, 
+MIN(rating) AS MIN_Rating, 
+MAX(rating) AS MAX_Rating
+FROM reviews
+WHERE test_name="Memory versus Pointing";
+
+/*Question 6: How would you query how much time it took to complete
+each test provided in the exam_answers table, in minutes? Title the column
+that represents this data "Duration." Note that the exam_answers table has 
+over 2 million rows, so if you don't limit your output, it will take longer than 
+usual to run this query. (HINT: use the TIMESTAMPDIFF function
+described at: 
+http://www.w3resource.com/mysql/date-and-time-functions/date-and-time-functions.php. 
+It might seem unkind of me to keep suggesting you look up and use new 
+functions I haven't demonstrated for you, but I really want you to become 
+confident that you know how to look up and use new functions when you need
+13 them! It will give you a very competative edge in the business world.)*/
+
+%%sql
+SHOW columns
+FROM exam_answers
+
+%%sql
+SELECT dog_guid, 
+TIMESTAMPDIFF(minute start_time,end_time) AS duration
+FROM exam_answers;
+
+/*Question 7: Include a column for Dog_Guid, start_time, and
+end_time in your query, and examine the output. Do you notice
+anything strange?*/
+
+%%sql
+SELECT dog_guid, start_time, end_time,
+TIMESTAMPDIFF(minute, start_time,end_time) AS duration
+FROM exam_answers
+
+%%sql  
+SELECT dog_guid, start_time, end_time, 
+TIMESTAMPDIFF(minute,start_time,end_time)  AS    Duration 
+FROM exam_answers
+LIMIT 2000
+
+/*Question 8: What is the average amount of time it took customers to
+complete all of the tests in the exam_answers table, if you do not exclude any data (the answer will be approximately 587 minutes)?*/
+
+%%sql
+SELECT AVG(TIMESTAMPDIFF(minute, start_time, end_time)) AS duration
+FROM exam_answers;
+
+/*Question 9: What is the average amount of time it took customers to complete the "Treat Warm-Up" test, according to the exam_answers table (about 165 minutes, if no data is excluded)?*/
+%%sql
+SELECT AVG(TIMESTAMPDIFF(minute, start_time, end_time)) AS warmup
+FROM exam_answers
+WHERE test_name = 'Treat Warm-Up';
+
+/*Question 10: How many possible test names are there in the exam_answers table?*/
+%%sql
+SELECT COUNT(DISTINCT test_name)
+FROM exam_answers;
+
+/*Question 11: What is the minimum and maximum value in the Duration
+ column of your query that included the data from the entire table?*/
+
+%%sql
+SELECT MIN(TIMESTAMPDIFF(minute, start_time, end_time)) AS Min_duration
+FROM exam_answers;
+
+
+%%sql
+SELECT dog_guid,
+MIN(TIMESTAMPDIFF(minute, start_time, end_time)) AS Min_duration,
+MAX(TIMESTAMPDIFF(minute, start_time, end_time)) AS Max_duration
+FROM exam_answers;
+
+%%sql
+SELECT
+MIN(TIMESTAMPDIFF(minute, start_time, end_time)) AS Min_duration,
+MAX(TIMESTAMPDIFF(minute, start_time, end_time)) AS Max_duration
+FROM exam_answers;
+
+/*Question 12: How many of these negative Duration entries are there? (the answer should be 620)*/
+%%sql
+SELECT
+COUNT(TIMESTAMPDIFF(minute, start_time, end_time)) AS duration
+FROM exam_answers
+WHERE TIMESTAMPDIFF(minute, start_time, end_time) < 0;
+
+/*
+Question 13: How would you query all the columns of all the rows
+that have negative durations so that you could examine whether
+ they share any features that might give you clues about what 
+caused the entry mistake?*/
+
+%%sql
+SELECT *
+FROM exam_answers
+WHERE TIMESTAMPDIFF(minute, start_time, end_time) < 0;
+
+
+/*Question 14: What is the average amount of time it took customers 
+to complete all of the tests in the exam_answers table when the negative
+durations are excluded from your calculation (you should get 11233 
+minutes)?*/
+
+%%sql
+SELECT AVG(TIMESTAMPDIFF(minute, start_time, end_time)) AS avg_time
+FROM exam_answers
+WHERE TIMESTAMPDIFF(minute, start_time, end_time) > 0;

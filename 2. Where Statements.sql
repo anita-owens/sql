@@ -155,6 +155,7 @@ SHOW columns FROM dogs
 
 #variables include: gender ("female" or "male"), breed, user_guid
 
+%%sql
 SELECT user_guid, gender, breed
 FROM dogs
 WHERE gender ="female" AND breed  LIKE ("%terrier%");
