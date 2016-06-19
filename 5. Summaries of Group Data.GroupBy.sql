@@ -23,6 +23,14 @@ run this "USE" command:*/
 
 %sql SHOW tables
 
+Tables_in_dognitiondb:
+complete_tests
+dogs
+exam_answers
+reviews
+site_activities
+users
+
 %sql SHOW columns FROM (enter table name here)
 
 %%sql
@@ -64,6 +72,7 @@ of each type of test completed each month, you could
  include both "test_name" and the derived "Month" field 
 in the GROUP BY clause, separated by a comma.*/
 
+%%sql
 SELECT test_name, MONTH(created_at) AS Month, COUNT(created_at) AS Num_Completed_Tests
 FROM complete_tests
 GROUP BY test_name, Month;
@@ -77,6 +86,38 @@ GROUP BY test_name, Month;
  derived field in the GROUP BY clause in addition to 
 including the derived field in the SELECT clause:*/
 
+%%sql
 SELECT test_name, MONTH(created_at) AS Month, COUNT(created_at) AS Num_Completed_Tests
 FROM complete_tests
 GROUP BY test_name, MONTH(created_at);
+
+%sql SHOW columns FROM (enter table name here)
+
+/*Question 1: Output a table that calculates the number of
+distinct female and male dogs in each breed group of the Dogs
+table, sorted by the total number of dogs in descending order
+(the sex/breed_group pair with the greatest number of dogs
+ should have 8466 unique Dog_Guids):*/
+
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name;
+
+%sql SHOW columns FROM dogs
+
+%%sql
+SELECT *
+FROM dogs
+LIMIT 5;
+
+%%sql
+SELECT DISTINCT breed_group
+FROM dogs;
+
+#answer
+%%sql
+SELECT gender, breed_group, COUNT(DISTINCT dog_guid) AS Num_Dogs
+FROM dogs
+GROUP BY gender, breed_group
+ORDER BY Num_Dogs DESC;
