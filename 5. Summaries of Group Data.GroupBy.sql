@@ -39,3 +39,44 @@ FROM dogs
 %%sql
 SELECT COUNT(DISTINCT dog_guid)
 FROM complete_tests
+
+/*
+You can form groups using derived values as well as
+original columns. To illustrate this, let's address another
+question: how many tests were completed during each
+month of the year?
+
+MONTH() will return a number representing the
+month of a date entry. To get the total number
+of tests completed each month, you could put
+the MONTH function into the GROUP BY clause, 
+in this case through an alias:*/
+
+SELECT test_name, MONTH(created_at) AS Month, COUNT(created_at) AS Num_Completed_Tests
+FROM complete_tests
+GROUP BY Month;
+
+
+/*
+You can also group by multiple columns or derived
+ fields. If we wanted to determine the total number 
+of each type of test completed each month, you could
+ include both "test_name" and the derived "Month" field 
+in the GROUP BY clause, separated by a comma.*/
+
+SELECT test_name, MONTH(created_at) AS Month, COUNT(created_at) AS Num_Completed_Tests
+FROM complete_tests
+GROUP BY test_name, Month;
+
+
+/*MySQL allows you to use aliases in a GROUP BY
+ clause, but some database systems do not. If you are
+ using a database system that does NOT accept aliases
+ in GROUP BY clauses, you can still group by derived
+ fields, but you have to duplicate the calculation for the
+ derived field in the GROUP BY clause in addition to 
+including the derived field in the SELECT clause:*/
+
+SELECT test_name, MONTH(created_at) AS Month, COUNT(created_at) AS Num_Completed_Tests
+FROM complete_tests
+GROUP BY test_name, MONTH(created_at);
