@@ -567,7 +567,7 @@ stores there are in the strinfo, store_msa, skstinfo, and
 trnsact tables. Which stores are common to all tables, or
 unique to specific tables?*/
 
-#
+
 SELECT COUNT(DISTINCT strinfo.store), COUNT(DISTINCT store_msa.store),
 COUNT(DISTINCT skstinfo.store), COUNT(DISTINCT trnsact.store)
 FROM strinfo
@@ -577,7 +577,23 @@ INNER JOIN trnsact
 ON skstinfo.store = trnsact.store
 INNER JOIN store_msa
 ON store_msa.store=trnsact.store
-#Start 10:42am
+#Start 10:42am-11:10am no more spool space
+
+SELECT COUNT (DISTINCT store)
+FROM strinfo;
+#453
+
+SELECT COUNT (DISTINCT store)
+FROM store_msa;
+#333
+
+SELECT COUNT (DISTINCT store)
+FROM skstinfo;
+#357
+
+SELECT COUNT (DISTINCT store)
+FROM trnsact;
+#332
 
 
 /*Exercise 3: It turns out that there are many skus in the 
@@ -799,3 +815,48 @@ GROUP BY saledate, state, zip, stype
 HAVING trnsact.stype = 'P'
 ORDER BY revenue DESC;
 # 04/12/23 LA 70002 P 178725.54
+
+
+/* WEEK 5 TERADATA PRACTICE EXERCISES*/
+
+DATABASE ua_dillards;
+
+SELECT COUNT(*)
+FROM trnsact;
+
+/*Exercise 1. How many distinct dates are there in the saledate
+column of the transaction table for each month/year combination 
+in the database?
+
+EXTRACT is a Teradata function that allows you extract date parts
+out of a date: http://www.info.teradata.com/htmlpubs/DB_TTU_14_00/index.html#page/SQL_Reference/B03 5_1145_111A/ch07.077.147.html#ww18265377
+The syntax to retrieve the month out of a date (as a number;
+there is no function in Teradata that will return the name of the month)
+is:
+     EXTRACT(MONTH from [fill in column name here])
+
+The syntax to retrieve the year out of a date is:
+
+     EXTRACT(YEAR from [fill in column here])
+
+Use these functions to answer the question in Exercise 1. 
+Don’t forget that you can’t use SQL keywords like “month” or “year”
+as aliases. 
+
+Instead of writing:*/
+EXTRACT(MONTH from [fill in column name here]) AS month
+
+/*Write something like:*/
+EXTRACT(MONTH from [fill in column name here]) AS month_num*/
+
+/*Exercise 2. Use a CASE statement within an aggregate function
+to determine which sku had the greatest total sales during
+the combined summer months of June, July, and August.*/
+
+#SYNTAX
+SELECT column1,
+CASE column2
+WHEN value1 THEN result1
+WHEN value2 THEN result2
+END
+FROM table
