@@ -230,7 +230,8 @@ ORDER BY state ASC, user_guid DESC;
 
 #alternate code
 %%sql
-SELECT state, zip, COUNT(DISTINCT user_guid) AS NUM_Users FROM users
+SELECT state, zip, COUNT(DISTINCT user_guid) AS NUM_Users
+FROM users
 WHERE Country="US"
 GROUP BY State, zip
 HAVING NUM_Users>=5
