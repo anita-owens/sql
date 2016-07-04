@@ -10,7 +10,6 @@ DATABASE ua_dillards;
 
 Select count(*) from trnsact;
 
-DATABASE ua_dillards;
 SELECT TOP 5*
 FROM TRNSACT;
 
@@ -260,4 +259,3 @@ FROM trnsact;
 - reference parts of text “strings”
 - use “BETWEEN” and “IN” in your query statements*/
 
-DATABASE ua_dillards;
