@@ -234,14 +234,6 @@ INNER JOIN users
 ON dogs.user_guid=users.user_guid
 WHERE breed_group IN ('Working','Sporting','Herding');
 
-#answer
-%%sql
-SELECT dogs.user_guid AS UserID, dogs.dog_guid AS DogID, dogs.breed, dogs.breed_type, dogs.breed_group
-FROM dogs
-INNER JOIN complete_tests
-ON dogs.dog_guid=complete_tests.dog_guid
-WHERE complete_tests.test_name = 'Yawn Warm-up'
-
 
 /*Question 8: Earlier we examined unique users in the users table
 who were NOT in the dogs table. Use a NOT EXISTS clause
