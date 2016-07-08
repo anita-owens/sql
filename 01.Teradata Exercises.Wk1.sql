@@ -1,3 +1,6 @@
+%%sql
+MySQL
+
 /*Teradata Database Exercises
 
 
