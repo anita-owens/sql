@@ -240,5 +240,57 @@ who were NOT in the dogs table. Use a NOT EXISTS clause
 to examine all the users in the dogs table that are not in
 the users table (you should get 2 rows in your output).*/
 
+#my answer
+%%sql
+SELECT DISTINCT dogs.user_guid as DogUserID, dogs.dog_guid AS DogDogID
+FROM dogs
+WHERE NOT EXISTS (SELECT DISTINCT users.user_guid
+					FROM users
+					WHERE dogs.user_guid=users.user_guid);
 
 
+#model query
+%%sql
+SELECT d.user_guid AS dUserID, d.dog_guid AS dDogID FROM dogs d
+WHERE NOT EXISTS (SELECT DISTINCT u.user_guid
+FROM users u
+WHERE d.user_guid =u.user_guid);
+
+
+/*
+Question 9: We saw earlier that user_guid 'ce7b75bc-7144-11e5-ba71-058fbc01cf0b'
+still ends up with 1819 rows of output after a left outer join with the
+dogs table. If you investigate why, you'll find out that's because there
+are duplicate user_guids in the dogs table as well. How would you adapt
+the query we wrote earlier (copied below) to only join unique UserIDs
+from the users table with unique UserIDs from the dog table?
+Join we wrote earlier:*/
+
+SELECT DistinctUUsersID.user_guid AS uUserID, d.user_guid AS dUserID, count(*) AS numrows
+FROM (SELECT DISTINCT u.user_guid 
+      FROM users u) AS DistinctUUsersID 
+LEFT JOIN dogs d
+  ON DistinctUUsersID.user_guid=d.user_guid
+GROUP BY DistinctUUsersID.user_guid
+ORDER BY numrows DESC;
+
+/*Let's build our way up to the correct query. To troubleshoot,
+let's only examine the rows related to user_guid
+'ce7b75bc-7144-11e5-ba71-058fbc01cf0b', since that's 
+the userID that is causing most of the trouble.
+
+Rewrite the query above to only LEFT JOIN distinct user(s)
+from the user table whose user_guid='ce7b75bc-7144-11e5-ba71-058fbc01cf0b'.
+The first two output columns should have matching user_guids,
+and the numrows column should have one row with a value of 1819:*/
+
+
+/*
+Question 10: Now let's prepare and test the inner query for
+the right half of the join. Give the dogs table an alias,
+and write a query that would select the distinct user_guids
+from the dogs table (we will use this query as a inner subquery
+in subsequent questions, so you will need an alias to differentiate
+the user_guid column of the dogs table from the user_guid column
+of the users table).
+*/

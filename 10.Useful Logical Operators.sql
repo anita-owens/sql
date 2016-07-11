@@ -405,7 +405,7 @@ FROM dogs
 GROUP BY personality_tested;
 
 
-
+DOGS table
 Field	Type	Null	Key	Default	Extra
 gender	varchar(255)	YES		None	
 birthday	varchar(255)	YES		None	
@@ -427,4 +427,27 @@ mean_iti_minutes	varchar(255)	YES		None
 median_iti_days	varchar(255)	YES		None	
 median_iti_minutes	varchar(255)	YES		None	
 time_diff_between_first_and_last_game_days	varchar(255)	YES		None	
-time_diff_between_first_and_last_game_minutes	varchar(255)	YES		None	
+time_diff_between_first_and_last_game_minutes	varchar(255)	YES		None
+
+
+%sql SHOW columns FROM complete_tests
+Field	Type	Null	Key	Default	Extra
+created_at	datetime	NO		None	
+updated_at	datetime	NO		None	
+user_guid	varchar(60)	YES	MUL	None	
+dog_guid	varchar(60)	YES	MUL	None	
+test_name	varchar(60)	YES		None	
+subcategory_name	varchar(60)	YES		None
+
+
+fd27b272-7144-11e5-ba71-058fbc01cf0b charmer 21
+
+%%sql
+SELECT * 
+FROM complete_tests
+WHERE dog_guid='fd27b272-7144-11e5-ba71-058fbc01cf0b'
+
+%%sql
+SELECT TIMEDIFF(created_at,updated_at) AS duration
+FROM complete_tests
+WHERE dog_guid='fd27b272-7144-11e5-ba71-058fbc01cf0b'		
