@@ -284,6 +284,17 @@ from the user table whose user_guid='ce7b75bc-7144-11e5-ba71-058fbc01cf0b'.
 The first two output columns should have matching user_guids,
 and the numrows column should have one row with a value of 1819:*/
 
+%%sql
+SELECT DistinctUUsersID.user_guid AS uUserID, d.user_guid AS dUserID, count(*) AS numrows
+FROM (SELECT DISTINCT u.user_guid 
+      FROM users u) AS DistinctUUsersID 
+LEFT JOIN dogs d
+  ON DistinctUUsersID.user_guid=d.user_guid
+  WHERE DistinctUUsersID.user_guid='ce7b75bc-7144-11e5-ba71-058fbc01cf0b'
+GROUP BY DistinctUUsersID.user_guid
+ORDER BY numrows DESC;
+
+
 
 /*
 Question 10: Now let's prepare and test the inner query for
@@ -294,3 +305,6 @@ in subsequent questions, so you will need an alias to differentiate
 the user_guid column of the dogs table from the user_guid column
 of the users table).
 */
+
+
+

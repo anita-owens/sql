@@ -108,13 +108,21 @@ labeled "" (nothing is between the quotation marks).
 
 #wrong
 %%sql
-SELECT dimension, AVG(num_of_tests_completed.num_of_tests)
+SELECT dimension, AVG(num_of_tests_completed.num_of_tests) AS avg_tests_completed
 FROM (SELECT complete_tests.dog_guid, COUNT(complete_tests.dog_guid) AS num_of_tests, dogs.dimension
 FROM complete_tests
 INNER JOIN dogs
 ON dogs.dog_guid=complete_tests.dog_guid
 GROUP BY dog_guid) AS num_of_tests_completed
 
+
+%%sql
+SELECT dimension
+FROM (SELECT dogs.dog_guid, COUNT(complete_tests.dog_guid) AS num_of_tests, dogs.dimension
+FROM complete_tests
+INNER JOIN dogs
+ON dogs.dog_guid=complete_tests.dog_guid
+GROUP BY dogs.dimension) AS num_of_tests_completed
 
 #model query
 %%sql
@@ -124,6 +132,8 @@ FROM dogs d, complete_tests c
 WHERE d.dog_guid=c.dog_guid
 GROUP BY dogID) AS numtests_per_dog
 GROUP BY numtests_per_dog.dimension;
+
+
 
 
 /*Question 5: How many unique DogIDs are summarized in
@@ -167,17 +177,103 @@ maximum time stamp in the complete_tests table, and total
 number of tests completed by each unique DogID that has a
 non-NULL empty string in the dimension column.*/
 
-/*Question 7: Rewrite the query in Question 4 to exclude DogIDs with (1) non-NULL empty strings in the dimension column, (2) NULL values in the dimension column, and (3) values of "1" in the exclude column. NOTES AND HINTS: You cannot use a clause that says d.exclude does not equal 1 to remove rows that have exclude flags, because Dognition clarified that both NULL values and 0 values in the "exclude" column are valid data. A clause that says you should only include values that are not equal to 1 would remove the rows that have NULL values in the exclude column, because NULL values are never included in equals statements (as we learned in the join lessons). In addition, although it should not matter for this query, practice including parentheses with your OR and AND statements that accurately reflect the logic you intend. Your results should return 402 DogIDs in the ace dimension and 626 dogs in the charmer dimension.*/
+/*Question 7: Rewrite the query in Question 4 to exclude DogIDs 
+with (1) non-NULL empty strings in the dimension column,
+(2) NULL values in the dimension column,
+and (3) values of "1" in the exclude column.
+NOTES AND HINTS: You cannot use a clause that says d.exclude
+does not equal 1 to remove rows that have exclude flags,
+because Dognition clarified that both NULL values and 0
+values in the "exclude" column are valid data. A clause 
+that says you should only include values that are not equal
+to 1 would remove the rows that have NULL values in the exclude
+column, because NULL values are never included in equals
+statements (as we learned in the join lessons). In addition,
+although it should not matter for this query, practice including
+parentheses with your OR and AND statements that accurately
+reflect the logic you intend. Your results should return
+402 DogIDs in the ace dimension and 626 dogs in the charmer dimension.*/
 
 
 /*Questions 8: Write a query that will output all of the distinct values in the breed_group field.*/
 
+%%sql
+SELECT DISTINCT breed_group
+FROM dogs
 
-/*Question 9: Write a query that outputs the breed, weight, value in the "exclude" column, first or minimum time stamp in the complete_tests table, last or maximum time stamp in the complete_tests table, and total number of tests completed by each unique DogID that has a NULL value in the breed_group column.*/
+breed_group
+Sporting
+Herding
+Toy
+Working
+None
+Hound
+Non-Sporting
+Terrier
+
+/*Question 9: Write a query that outputs the breed, weight,
+value in the "exclude" column, first or minimum time stamp
+in the complete_tests table, last or maximum time stamp
+in the complete_tests table, and total number of tests
+completed by each unique DogID that has a NULL value in
+the breed_group column.*/
 
 
- /*Question 10: Adapt the query in Question 7 to examine the relationship between breed_group and number of tests completed. Exclude DogIDs with values of "1" in the exclude column. Your results should return 1774 DogIDs in the Herding breed group.*/
+#NUMBER OF NULL VALUES IN BREED GROUP
+%%sql
+SELECT COUNT(DISTINCT dogs.dog_guid)
+FROM dogs
+INNER JOIN complete_tests
+ON dogs.dog_guid=complete_tests.dog_guid
+WHERE breed_group IS NULL
+#COUNT(DISTINCT dogs.dog_guid)   8816
+
+#answer
+%%sql
+SELECT dogs.dog_guid, dogs.breed, dogs.weight, dogs.exclude, MIN(complete_tests.created_at), MAX(complete_tests.updated_at), COUNT(complete_tests.dog_guid) AS num_of_tests
+FROM dogs
+INNER JOIN complete_tests
+ON dogs.dog_guid=complete_tests.dog_guid
+WHERE breed_group IS NULL
+GROUP BY dogs.dog_guid
+
+
+
+
+ /*Question 10: Adapt the query in Question 7 to examine the 
+ relationship between breed_group and number of tests completed.
+ Exclude DogIDs with values of "1" in the exclude column.
+ Your results should return 1774 DogIDs in the Herding breed group.*/
+
+
+
 
 
  /*Question 11: Adapt the query in Question 10 to only report results for Sporting, Hound, Herding, and Working breed_groups using an IN clause.*/
- 
+
+
+ /*Questions 12: Begin by writing a query that will output
+ all of the distinct values in the breed_type field.*/
+
+ %%sql
+ SELECT DISTINCT breed_type
+ FROM dogs
+
+ /*Question 14: For each unique DogID, output its dog_guid,
+ breed_type, number of completed tests, and use a CASE
+ statement to include an extra column with a string that
+ reads "Pure_Breed" whenever breed_type equals 'Pure Breed"
+ and "Not_Pure_Breed" whenever breed_type equals anything else.
+ LIMIT your output to 50 rows for troubleshooting.*/
+
+
+%%sql
+SELECT DISTINCT dogs.dog_guid, dogs.breed_type, COUNT(complete_tests.created_at) AS num_of_tests,
+CASE WHEN dogs.breed_type='Pure Breed' THEN 'Pure_Breed'
+	ELSE 'Not_Pure_Breed'
+	END AS type_of_breed
+FROM dogs
+INNER JOIN complete_tests
+ON dogs.dog_guid=complete_tests.dog_guid
+GROUP BY dogs.dog_guid
+LIMIT 25;

@@ -179,13 +179,21 @@ GROUP BY store, EXTRACT(YEAR from saledate), EXTRACT(MONTH from saledate);
 
 
 
-/*Exercise 4. What is the average daily revenue for each store/month/year combination in the database? Calculate this by dividing the total revenue for a group by the number of sales days available in the transaction table for that group.*/
+/*Exercise 4. What is the average daily revenue for
+each store/month/year
+combination in the database?
+Calculate this by dividing the total revenue for a group
+by the number of sales days available in the transaction 
+table for that group.*/
 
 
-/*Exercise 5. What is the average daily revenue brought in by Dillard’s stores in areas of high, medium, or low levels of high school education?*/
+/*Exercise 5. What is the average daily revenue brought in by 
+Dillard’s stores in areas of high, medium, or low levels of
+high school education?*/
 
 
-/*Exercise 6. Compare the average daily revenues of the stores with the highest median msa_income and the lowest median msa_income. In what city and state were these stores, and which store had a higher average daily revenue?
+/*Exercise 6. Compare the average daily revenues of the stores
+with the highest median msa_income and the lowest median msa_income. In what city and state were these stores, and which store had a higher average daily revenue?
 */
 
 
