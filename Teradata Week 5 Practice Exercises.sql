@@ -123,15 +123,6 @@ WHERE stype = 'P'
 GROUP BY sku
 ORDER BY total_sales DESC
 
-#answer
-SELECT sku, SUM(AMT) AS total_sales
-FROM trnsact
-WHERE stype = 'P'
-AND EXTRACT(MONTH from saledate)>=6 AND EXTRACT(MONTH from saledate)<=8
-GROUP BY sku
-ORDER BY total_sales DESC
-#589615 rows total
-#4108011 $1,646,017.38
 
 SELECT column1,
 CASE column2
@@ -148,7 +139,7 @@ END
 FROM store_msa
 
 
-#this actually works but it is only part of the solution. how to to total sales for those 3 moths
+#this actually works but it is only part of the solution. how  to total sales for those 3 months
 SELECT sku,
 CASE 
 WHEN EXTRACT(MONTH from saledate)=6 THEN 'june'
@@ -157,6 +148,16 @@ WHEN EXTRACT(MONTH from saledate)=8 THEN 'august'
 END
 FROM trnsact
 
+
+#answer
+SELECT sku, SUM(AMT) AS total_sales
+FROM trnsact
+WHERE stype = 'P'
+AND EXTRACT(MONTH from saledate)>=6 AND EXTRACT(MONTH from saledate)<=8
+GROUP BY sku
+ORDER BY total_sales DESC
+#589615 rows total
+#4108011 $1,646,017.38
 
 /*Exercise 3. How many distinct dates are there in the
  saledate column of the transaction table for each
@@ -178,8 +179,8 @@ FROM trnsact
 GROUP BY store, EXTRACT(YEAR from saledate), EXTRACT(MONTH from saledate);
 
 
-
-/*Exercise 4. What is the average daily revenue for
+/*Exercise 4. What is the average daily
+revenue for
 each store/month/year
 combination in the database?
 Calculate this by dividing the total revenue for a group
@@ -193,9 +194,11 @@ high school education?*/
 
 
 /*Exercise 6. Compare the average daily revenues of the stores
-with the highest median msa_income and the lowest median msa_income. In what city and state were these stores, and which store had a higher average daily revenue?
+with the highest median msa_income and the lowest median msa_income. In what
+city and state were these stores, and which store had a higher average daily revenue?
 */
 
 
-/*Exercise 7: What is the brand of the sku with the greatest standard deviation in sprice? Only examine skus that have been part of over 100 transactions.*/
+/*Exercise 7: What is the brand of the sku with the greatest standard deviation in sprice?
+ Only examine skus that have been part of over 100 transactions.*/
 
